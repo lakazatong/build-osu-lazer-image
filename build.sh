@@ -1,1 +1,1 @@
-docker build -t osulazer . && docker run --name temp-osu osulazer && docker commit temp-osu osulazer:prewarmed
+docker build -t osu-server . && docker run --name temp-osu osu-server && docker commit temp-osu osu-server:prewarmed
