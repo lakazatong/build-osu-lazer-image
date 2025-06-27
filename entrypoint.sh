@@ -1,7 +1,5 @@
 #!/bin/bash
 
-chmod +x /init.sh /warmup.sh
-
 /init.sh
 
 case "$MODE" in

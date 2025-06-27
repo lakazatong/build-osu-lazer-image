@@ -24,7 +24,6 @@ shift
 goto loop
 
 :after_args
-docker rmi %IMAGE_NAME% >nul 2>&1
 docker build -t %IMAGE_NAME% .
 
 if "%WARMUP%"=="true" (
@@ -40,7 +39,7 @@ echo Usage: build.bat [options]
 echo.
 echo Options:
 echo   --name ^<image_name^>    Set the name of the Docker image (default: osu-server)
-echo   -w, --warmup             Build and warm up the container
+echo   -w, --warmup             Also builds ^<image_name^>:prewarmed
 echo   -h, --help               Show this help message
 echo.
 echo Example usage:

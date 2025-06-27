@@ -10,7 +10,7 @@ function show_help() {
 	echo ""
 	echo "Options:"
 	echo "  --name <image_name>    Set the name of the Docker image (default: osu-server)"
-	echo "  -w, --warmup           Build and warm up the container"
+	echo "  -w, --warmup           Also builds <image_name>:prewarmed"
 	echo "  -h, --help             Show this help message"
 	echo ""
 	echo "Example usage:"
@@ -38,7 +38,6 @@ while [[ "$1" =~ ^- ]]; do
 	esac
 done
 
-docker rmi "$IMAGE_NAME" 2>/dev/null || true
 docker build -t "$IMAGE_NAME" .
 
 if [ "$WARMUP" == true ]; then
