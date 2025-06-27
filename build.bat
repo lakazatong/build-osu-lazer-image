@@ -26,12 +26,13 @@ goto loop
 :after_args
 docker build -t %IMAGE_NAME% .
 
-if "%WARMUP%"=="true" (
+if !WARMUP! == true (
 	docker rm -f temp-osu >nul 2>&1
 	docker run -e MODE=warmup --name temp-osu %IMAGE_NAME%
 	docker commit temp-osu %IMAGE_NAME%:prewarmed
 	docker rm temp-osu
 )
+
 goto :eof
 
 :show_help
