@@ -24,6 +24,7 @@ shift
 goto loop
 
 :after_args
+docker rmi %IMAGE_NAME% >nul 2>&1
 docker build -t %IMAGE_NAME% .
 
 if "%WARMUP%"=="true" (

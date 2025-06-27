@@ -38,6 +38,7 @@ while [[ "$1" =~ ^- ]]; do
 	esac
 done
 
+docker rmi "$IMAGE_NAME" 2>/dev/null || true
 docker build -t "$IMAGE_NAME" .
 
 if [ "$WARMUP" == true ]; then
