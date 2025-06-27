@@ -14,4 +14,4 @@ EXPOSE 8080
 COPY warmup.sh /warmup.sh
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /warmup.sh /entrypoint.sh
-CMD ["/entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]

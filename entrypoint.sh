@@ -26,8 +26,7 @@ case "$MODE" in
 		/warmup.sh
 		;;
 	*)
-		cd /
-		bash
+		bash --rcfile <(echo 'echo "cd /osu-server && dotnet run --project osu.Desktop"; cd /osu-server && dotnet run --project osu.Desktop')
 		;;
 esac
 
