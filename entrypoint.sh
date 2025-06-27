@@ -1,18 +1,15 @@
 #!/bin/bash
 
-set -e
+chmod +x /init.sh /warmup.sh
 
-cd osu 
-output_file=$(mktemp)
-dotnet run --project osu.Desktop > "$output_file" &
-pid=$!
+/init.sh
 
-while read line; do
-	echo "$line"
-	if [[ "$line" =~ "[LocalCachedBeatmapMetadataSource] Local cache fetch completed successfully" ]]; then
-		echo "Stopping in 10s..."
-		sleep 10
-		kill -INT $pid
-		break
-	fi
-done < <(stdbuf -oL tail -f "$output_file")
+case "$MODE" in
+	warmup)
+		/warmup.sh
+		;;
+	*)
+		;;
+esac
+
+exec bash
