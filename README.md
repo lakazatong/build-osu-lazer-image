@@ -10,8 +10,14 @@ This will build the Docker image tagged as `osu-server`.
 For more information, use `--help`.
 ### 3. Running the Docker Container
 ```
-docker run -it osu-server
+docker run -it --name <container_name> osu-server
 ```
+You will see a bunch of
+```
+Failed to read: XXX
+Setting default value
+```
+That's perfectly normal, it's fluxbox not finding any fluxbox config, it thus uses the default values.
 ### 4. Running the osu! Game
 In /osu-server:
 ```
