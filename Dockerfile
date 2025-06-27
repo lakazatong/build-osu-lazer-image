@@ -11,8 +11,7 @@ ENV DISPLAY=:99
 
 EXPOSE 8080
 
-COPY init.sh /init.sh
 COPY warmup.sh /warmup.sh
 COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /init.sh /warmup.sh /entrypoint.sh
+RUN chmod +x /warmup.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]

@@ -10,7 +10,7 @@ This will build the Docker image tagged as `osu-server`.
 For more information, use `--help`.
 ### 3. Running the Docker Container
 ```
-docker run -it --name <container_name> osu-server
+docker run -p 8080:8080 -it --name <container_name> osu-server
 ```
 You will see a bunch of
 ```
