@@ -42,7 +42,9 @@ docker build -t "$IMAGE_NAME" .
 
 if [ "$WARMUP" == true ]; then
 	docker rm -f temp-osu 2>/dev/null || true
+	echo "running the container..."
 	docker run -e MODE=warmup --name temp-osu "$IMAGE_NAME"
+	echo "committing..."
 	docker commit temp-osu "$IMAGE_NAME":prewarmed
 	docker rm temp-osu
 fi

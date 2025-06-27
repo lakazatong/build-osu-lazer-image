@@ -16,3 +16,5 @@ while read line; do
 		break
 	fi
 done < <(stdbuf -oL tail -f "$output_file")
+
+echo "Stopped"
