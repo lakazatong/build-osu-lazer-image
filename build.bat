@@ -1,54 +1,48 @@
-$ErrorActionPreference = "Stop"
+@echo off
+setlocal enabledelayedexpansion
 
-$IMAGE_NAME = "osu-server"
-$WARMUP = $false
+set IMAGE_NAME=osu-server
+set WARMUP=false
 
-function Show-Help {
-	Write-Host "Usage: $0 [options]"
-	Write-Host ""
-	Write-Host "Options:"
-	Write-Host "  --name <image_name>    Set the name of the Docker image (default: osu-server)"
-	Write-Host "  -w, --warmup           Build and warm up the container"
-	Write-Host "  -h, --help             Show this help message"
-	Write-Host ""
-	Write-Host "Example usage:"
-	Write-Host "  $0 --name custom-image-name -w"
-}
+:parse_args
+set i=1
+:loop
+if "%~1"=="" goto after_args
+if "%~1"=="--name" (
+	shift
+	set IMAGE_NAME=%~1
+) else if "%~1"=="-w" (
+	set WARMUP=true
+) else if "%~1"=="--warmup" (
+	set WARMUP=true
+) else if "%~1"=="-h" (
+	goto show_help
+) else if "%~1"=="--help" (
+	goto show_help
+)
+shift
+goto loop
 
-while ($args.Count -gt 0) {
-	switch ($args[0]) {
-		"--name" {
-			$IMAGE_NAME = $args[1]
-			$args = $args[2..$args.Length]
-		}
-		"-w" {
-			$WARMUP = $true
-			$args = $args[1..$args.Length]
-		}
-		"--warmup" {
-			$WARMUP = $true
-			$args = $args[1..$args.Length]
-		}
-		"-h" {
-			Show-Help
-			exit 0
-		}
-		"--help" {
-			Show-Help
-			exit 0
-		}
-		default {
-			Write-Host "Unknown option: $($args[0])"
-			exit 1
-		}
-	}
-}
+:after_args
+docker build -t %IMAGE_NAME% .
 
-docker build -t $IMAGE_NAME .
-
-if ($WARMUP) {
-	docker rm -f temp-osu 2>$null
-	docker run -e MODE=warmup --name temp-osu $IMAGE_NAME
-	docker commit temp-osu "$IMAGE_NAME:prewarmed"
+if "%WARMUP%"=="true" (
+	docker rm -f temp-osu >nul 2>&1
+	docker run -e MODE=warmup --name temp-osu %IMAGE_NAME%
+	docker commit temp-osu %IMAGE_NAME%:prewarmed
 	docker rm temp-osu
-}
+)
+goto :eof
+
+:show_help
+echo Usage: build.bat [options]
+echo.
+echo Options:
+echo   --name ^<image_name^>    Set the name of the Docker image (default: osu-server)
+echo   -w, --warmup             Build and warm up the container
+echo   -h, --help               Show this help message
+echo.
+echo Example usage:
+echo   build.bat --name custom-image-name -w
+pause
+exit /b
