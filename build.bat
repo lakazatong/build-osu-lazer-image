@@ -3,6 +3,7 @@ setlocal enabledelayedexpansion
 
 set IMAGE_NAME=osu-server
 set WARMUP=false
+set NO_CACHE=false
 
 :parse_args
 set i=1
@@ -15,6 +16,10 @@ if "%~1"=="--name" (
 	set WARMUP=true
 ) else if "%~1"=="--warmup" (
 	set WARMUP=true
+) else if "%~1"=="-f" (
+	set NO_CACHE=true
+) else if "%~1"=="--no-cache" (
+	set NO_CACHE=true
 ) else if "%~1"=="-h" (
 	goto show_help
 ) else if "%~1"=="--help" (
@@ -24,7 +29,11 @@ shift
 goto loop
 
 :after_args
-docker build -t %IMAGE_NAME% .
+set BUILD_CMD=docker build -t %IMAGE_NAME% .
+if "%NO_CACHE%"=="true" (
+	set BUILD_CMD=docker build --no-cache -t %IMAGE_NAME% .
+)
+%BUILD_CMD%
 
 if !WARMUP! == true (
 	docker rm -f temp-osu >nul 2>&1
@@ -43,9 +52,10 @@ echo.
 echo Options:
 echo   --name ^<image_name^>    Set the name of the Docker image (default: osu-server)
 echo   -w, --warmup             Also builds ^<image_name^>:prewarmed
+echo   -f, --no-cache           Force Docker to build without cache
 echo   -h, --help               Show this help message
 echo.
 echo Example usage:
-echo   build.bat --name custom-image-name -w
+echo   build.bat --name custom-image-name -w -f
 pause
 exit /b

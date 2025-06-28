@@ -11,10 +11,11 @@ function show_help() {
 	echo "Options:"
 	echo "  --name <image_name>    Set the name of the Docker image (default: osu-server)"
 	echo "  -w, --warmup           Also builds <image_name>:prewarmed"
+	echo "  -f, --no-cache         Force Docker to build without cache"
 	echo "  -h, --help             Show this help message"
 	echo ""
 	echo "Example usage:"
-	echo "  $0 --name custom-image-name -w"
+	echo "  $0 --name custom-image-name -w -f"
 }
 
 while [[ "$1" =~ ^- ]]; do
@@ -25,6 +26,10 @@ while [[ "$1" =~ ^- ]]; do
 			;;
 		-w|--warmup)
 			WARMUP=true
+			shift
+			;;
+		-f|--no-cache)
+			NO_CACHE=true
 			shift
 			;;
 		-h|--help)
@@ -38,7 +43,12 @@ while [[ "$1" =~ ^- ]]; do
 	esac
 done
 
-docker build -t "$IMAGE_NAME" .
+BUILD_ARGS=()
+if [ "$NO_CACHE" == true ]; then
+	BUILD_ARGS+=(--no-cache)
+fi
+
+docker build "${BUILD_ARGS[@]}" -t "$IMAGE_NAME" .
 
 if [ "$WARMUP" == true ]; then
 	docker rm -f temp-osu 2>/dev/null || true
