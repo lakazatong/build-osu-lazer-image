@@ -8,6 +8,8 @@ RUN git clone https://github.com/lakazatong/osu-server
 RUN git clone https://github.com/lakazatong/osu-framework-server
 
 ENV DISPLAY=:99
+ENV DOCKER_ENV=true
+ENV OSU_SERVER_PORT=8080
 
 EXPOSE 8080
 
